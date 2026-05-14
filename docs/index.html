@@ -2,60 +2,108 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><C class="O M P U T E R"></C> – KI-Assistent</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>COMPUTER – AI Agent</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#050510;color:#ff9d2e;font-family:'Consolas',monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
-.container{max-width:600px;padding:40px 20px}
-h1{font-size:36px;letter-spacing:8px;margin-bottom:8px}
-.subtitle{color:#5a4a30;font-size:12px;letter-spacing:4px;margin-bottom:40px}
-.orb{width:200px;height:200px;border-radius:50%;margin:0 auto 40px;position:relative}
-.orb::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,157,46,0.2);animation:spin 10s linear infinite}
-.orb::after{content:'';position:absolute;inset:30px;border-radius:50%;background:radial-gradient(circle,rgba(255,180,60,0.3),transparent 70%);animation:pulse 3s ease-in-out infinite}
+body{background:#050510;color:#ff9d2e;font-family:'Consolas',monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow-x:hidden}
+.boot{position:fixed;inset:0;background:#050510;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;animation:bootOut 1s 3s forwards}
+.boot-text{font-size:28px;letter-spacing:8px;opacity:0;animation:fadeIn 0.8s 0.3s forwards}
+.boot-line{width:200px;height:1px;background:linear-gradient(90deg,transparent,#ff9d2e,transparent);margin-top:12px;opacity:0;animation:fadeIn 0.8s 0.8s forwards}
+.boot-ver{color:#5a4a30;font-size:10px;margin-top:8px;opacity:0;animation:fadeIn 0.8s 1.3s forwards;letter-spacing:3px}
+.boot-bar{width:180px;height:2px;background:#1a1508;margin-top:20px;border-radius:2px;opacity:0;animation:fadeIn 0.5s 1.8s forwards}
+.boot-bar-fill{height:100%;width:0;background:#ff9d2e;border-radius:2px;animation:loadBar 1s 2s forwards}
+@keyframes fadeIn{to{opacity:1}}
+@keyframes bootOut{to{opacity:0;pointer-events:none}}
+@keyframes loadBar{to{width:100%}}
+.container{max-width:700px;padding:40px 20px;opacity:0;animation:fadeIn 1s 3.5s forwards}
+h1{font-size:48px;letter-spacing:12px;margin-bottom:4px}
+.subtitle{color:#5a4a30;font-size:11px;letter-spacing:6px;margin-bottom:50px}
+.orb-wrap{position:relative;width:220px;height:220px;margin:0 auto 50px}
+.orb-core{position:absolute;inset:60px;border-radius:50%;background:radial-gradient(circle,rgba(255,180,60,0.4),rgba(255,140,30,0.1) 60%,transparent 80%);animation:corePulse 3s ease-in-out infinite}
+.orb-ring{position:absolute;border-radius:50%;border:1px solid rgba(255,157,46,0.12)}
+.orb-ring:nth-child(1){inset:0;animation:spin 20s linear infinite}
+.orb-ring:nth-child(2){inset:15px;animation:spin 15s linear infinite reverse}
+.orb-ring:nth-child(3){inset:30px;animation:spin 12s linear infinite}
+.orb-ring:nth-child(4){inset:45px;animation:spin 10s linear infinite reverse;border-color:rgba(255,157,46,0.2)}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.1);opacity:1}}
-.ring{position:absolute;border-radius:50%;border:1px solid rgba(255,157,46,0.1)}
-.ring:nth-child(1){inset:-20px;animation:spin 15s linear infinite reverse}
-.ring:nth-child(2){inset:-40px;animation:spin 20s linear infinite}
-.ring:nth-child(3){inset:-60px;animation:spin 25s linear infinite reverse}
-.desc{color:#8a7040;font-size:14px;line-height:1.8;margin-bottom:40px}
-.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:40px;text-align:left}
-.feature{background:rgba(255,157,46,0.05);border:1px solid rgba(255,157,46,0.1);border-radius:8px;padding:12px 16px;font-size:11px;color:#8a7040}
-.feature span{color:#ff9d2e;display:block;margin-bottom:4px;font-size:12px}
-.download{display:inline-block;padding:14px 40px;background:rgba(255,157,46,0.1);border:1px solid #ff9d2e;border-radius:8px;color:#ff9d2e;text-decoration:none;font-size:14px;letter-spacing:2px;transition:all 0.3s}
-.download:hover{background:rgba(255,157,46,0.2);transform:scale(1.05)}
-.footer{color:#2a2010;font-size:9px;margin-top:40px;letter-spacing:3px}
+@keyframes corePulse{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.15);opacity:1}}
+.desc{color:#8a7040;font-size:13px;line-height:2;margin-bottom:40px}
+.features{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:45px;text-align:left}
+@media(max-width:600px){.features{grid-template-columns:1fr 1fr}}
+.feature{background:rgba(255,157,46,0.04);border:1px solid rgba(255,157,46,0.08);border-radius:8px;padding:12px 14px;font-size:10px;color:#6a5a30;transition:border-color 0.3s}
+.feature:hover{border-color:rgba(255,157,46,0.3)}
+.feature span{color:#ff9d2e;display:block;margin-bottom:4px;font-size:11px;letter-spacing:1px}
+.buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
+.btn{display:inline-block;padding:14px 40px;background:rgba(255,157,46,0.08);border:1px solid #ff9d2e;border-radius:8px;color:#ff9d2e;text-decoration:none;font-family:'Consolas',monospace;font-size:13px;letter-spacing:3px;transition:all 0.3s;cursor:pointer}
+.btn:hover{background:rgba(255,157,46,0.15);transform:scale(1.03);box-shadow:0 0 30px rgba(255,157,46,0.1)}
+.btn-secondary{border-color:#5a4a30;color:#8a7040}
+.btn-secondary:hover{border-color:#ff9d2e;color:#ff9d2e}
+.btn-sub{display:block;color:#5a4a30;font-size:9px;margin-top:15px;letter-spacing:2px}
+.footer{color:#1a1508;font-size:8px;margin-top:40px;letter-spacing:4px}
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0}
+.particle{position:absolute;width:2px;height:2px;background:#ff9d2e;border-radius:50%;opacity:0;animation:float 6s ease-in-out infinite}
+@keyframes float{0%{opacity:0;transform:translateY(0)}20%{opacity:0.3}80%{opacity:0.1}100%{opacity:0;transform:translateY(-200px)}}
+.stats{display:flex;gap:30px;justify-content:center;margin-bottom:40px}
+.stat{text-align:center}
+.stat .num{font-size:28px;color:#ff9d2e}
+.stat .label{font-size:9px;color:#5a4a30;letter-spacing:2px}
 </style>
 </head>
 <body>
+<div class="boot">
+<span class="boot-text">COMPUTER</span>
+<div class="boot-line"></div>
+<span class="boot-ver">AI AGENT v2.0</span>
+<div class="boot-bar"><div class="boot-bar-fill"></div></div>
+</div>
+<div class="particles" id="particles"></div>
 <div class="container">
-<h1>J.A.R.V.I.S.</h1>
-<div class="subtitle">PERSONAL AI ASSISTANT SYSTEM</div>
-
-<div class="orb">
-<div class="ring"></div>
-<div class="ring"></div>
-<div class="ring"></div>
+<h1>COMPUTER</h1>
+<div class="subtitle">AUTONOMOUS AI AGENT</div>
+<div class="orb-wrap">
+<div class="orb-ring"></div><div class="orb-ring"></div><div class="orb-ring"></div><div class="orb-ring"></div>
+<div class="orb-core"></div>
 </div>
-
+<div class="stats">
+<div class="stat"><div class="num">30+</div><div class="label">TOOLS</div></div>
+<div class="stat"><div class="num">16+</div><div class="label">SPRACHEN</div></div>
+<div class="stat"><div class="num">∞</div><div class="label">BEFEHLE</div></div>
+</div>
 <p class="desc">
-Dein persönlicher KI-Assistent mit Sprachsteuerung.<br>
-Gesteuert durch Groq AI. Inspiriert von Stark Industries.
+Autonomer KI-Agent mit Sprachsteuerung, Smart Home,<br>
+Browser-Automatisierung und Web-Dashboard.<br>
+Gebaut für maximale Produktivität.
 </p>
-
 <div class="features">
-<div class="feature"><span>Sprachsteuerung</span>Rede einfach – kein Wake-Word nötig</div>
-<div class="feature"><span>Smart Home</span>Lichter, Geräte, Heizung steuern</div>
-<div class="feature"><span>Apps & Streaming</span>OBS, Discord, Spotify per Sprache</div>
-<div class="feature"><span>Gedächtnis</span>Merkt sich deine Vorlieben</div>
-<div class="feature"><span>Wetter & Timer</span>Echtzeit-Daten, Erinnerungen</div>
-<div class="feature"><span>Custom Commands</span>Eigene Befehle erstellen</div>
+<div class="feature"><span>AI Agent</span>Plant & führt Aufgaben autonom aus</div>
+<div class="feature"><span>Sprachsteuerung</span>Kein Wake-Word nötig</div>
+<div class="feature"><span>Smart Home</span>Govee Lichter per Sprache</div>
+<div class="feature"><span>Browser Bot</span>Webseiten automatisieren</div>
+<div class="feature"><span>Dashboard</span>Sci-Fi Control Center</div>
+<div class="feature"><span>WhatsApp</span>Nachrichten per Sprache</div>
+<div class="feature"><span>Discord</span>Bot Integration</div>
+<div class="feature"><span>Email</span>Senden & Empfangen</div>
+<div class="feature"><span>Webhooks</span>Externe Dienste anbinden</div>
+<div class="feature"><span>Produktivität</span>Todos, Timer, Habits</div>
+<div class="feature"><span>Media</span>Spotify & Musik steuern</div>
+<div class="feature"><span>System</span>PC komplett per Sprache</div>
 </div>
-
-<a href="https://github.com/DEIN_USERNAME/jarvis-assistant/releases" class="download">DOWNLOAD</a>
-
-<div class="footer">STARK INDUSTRIES // JARVIS v4.2</div>
+<div class="buttons">
+<a href="https://drive.google.com/uc?export=download&id=1544FeGFjOqhAK542FIn1-6HapRxm-bSL" class="btn">DOWNLOAD EXE</a>
+<a href="https://github.com/Jasprrr0719/Computer-Assistent" class="btn btn-secondary">SOURCE CODE</a>
 </div>
+<span class="btn-sub">Windows 10/11 – Kostenlos – Open Source<br>Bei SmartScreen: "Weitere Informationen" → "Trotzdem ausführen"</span>
+<div class="footer">COMPUTER AI AGENT v2.0 // 2026</div>
+</div>
+<script>
+var p=document.getElementById('particles');
+for(var i=0;i<30;i++){
+var d=document.createElement('div');d.className='particle';
+d.style.left=Math.random()*100+'%';d.style.top=60+Math.random()*40+'%';
+d.style.animationDelay=Math.random()*6+'s';d.style.animationDuration=4+Math.random()*4+'s';
+p.appendChild(d);
+}
+</script>
 </body>
 </html>
