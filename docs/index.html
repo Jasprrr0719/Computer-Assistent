@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><C class="O M P U T E R"></C> – KI-Assistent</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050510;color:#ff9d2e;font-family:'Consolas',monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+.container{max-width:600px;padding:40px 20px}
+h1{font-size:36px;letter-spacing:8px;margin-bottom:8px}
+.subtitle{color:#5a4a30;font-size:12px;letter-spacing:4px;margin-bottom:40px}
+.orb{width:200px;height:200px;border-radius:50%;margin:0 auto 40px;position:relative}
+.orb::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,157,46,0.2);animation:spin 10s linear infinite}
+.orb::after{content:'';position:absolute;inset:30px;border-radius:50%;background:radial-gradient(circle,rgba(255,180,60,0.3),transparent 70%);animation:pulse 3s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.1);opacity:1}}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(255,157,46,0.1)}
+.ring:nth-child(1){inset:-20px;animation:spin 15s linear infinite reverse}
+.ring:nth-child(2){inset:-40px;animation:spin 20s linear infinite}
+.ring:nth-child(3){inset:-60px;animation:spin 25s linear infinite reverse}
+.desc{color:#8a7040;font-size:14px;line-height:1.8;margin-bottom:40px}
+.features{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:40px;text-align:left}
+.feature{background:rgba(255,157,46,0.05);border:1px solid rgba(255,157,46,0.1);border-radius:8px;padding:12px 16px;font-size:11px;color:#8a7040}
+.feature span{color:#ff9d2e;display:block;margin-bottom:4px;font-size:12px}
+.download{display:inline-block;padding:14px 40px;background:rgba(255,157,46,0.1);border:1px solid #ff9d2e;border-radius:8px;color:#ff9d2e;text-decoration:none;font-size:14px;letter-spacing:2px;transition:all 0.3s}
+.download:hover{background:rgba(255,157,46,0.2);transform:scale(1.05)}
+.footer{color:#2a2010;font-size:9px;margin-top:40px;letter-spacing:3px}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>J.A.R.V.I.S.</h1>
+<div class="subtitle">PERSONAL AI ASSISTANT SYSTEM</div>
+
+<div class="orb">
+<div class="ring"></div>
+<div class="ring"></div>
+<div class="ring"></div>
+</div>
+
+<p class="desc">
+Dein persönlicher KI-Assistent mit Sprachsteuerung.<br>
+Gesteuert durch Groq AI. Inspiriert von Stark Industries.
+</p>
+
+<div class="features">
+<div class="feature"><span>Sprachsteuerung</span>Rede einfach – kein Wake-Word nötig</div>
+<div class="feature"><span>Smart Home</span>Lichter, Geräte, Heizung steuern</div>
+<div class="feature"><span>Apps & Streaming</span>OBS, Discord, Spotify per Sprache</div>
+<div class="feature"><span>Gedächtnis</span>Merkt sich deine Vorlieben</div>
+<div class="feature"><span>Wetter & Timer</span>Echtzeit-Daten, Erinnerungen</div>
+<div class="feature"><span>Custom Commands</span>Eigene Befehle erstellen</div>
+</div>
+
+<a href="https://github.com/DEIN_USERNAME/jarvis-assistant/releases" class="download">DOWNLOAD</a>
+
+<div class="footer">STARK INDUSTRIES // JARVIS v4.2</div>
+</div>
+</body>
+</html>

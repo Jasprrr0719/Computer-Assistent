@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Computer · AR Display</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan: #00ffe1;
+    --cyan-glow: 0 0 20px rgba(0, 255, 225, 0.6);
+    --pink: #ff3b9a;
+    --amber: #ffb547;
+    --bg-ink: #02050a;
+    --text-dim: rgba(255, 255, 255, 0.65);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-ink); }
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    color: white;
+    cursor: none;
+  }
+
+  #webcam {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    filter: saturate(0.85) contrast(1.05);
+  }
+
+  #overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  #vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.7) 100%);
+    z-index: 2;
+  }
+
+  .hud {
+    position: fixed;
+    z-index: 10;
+    padding: 14px 18px;
+    background: rgba(2, 5, 10, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 255, 225, 0.25);
+    border-radius: 10px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  #hud-left { top: 20px; left: 20px; }
+  #hud-right { top: 20px; right: 20px; text-align: right; }
+
+  .hud h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    color: var(--cyan);
+    text-shadow: var(--cyan-glow);
+    margin-bottom: 6px;
+    letter-spacing: 0.2em;
+  }
+
+  .hud .stat {
+    color: var(--text-dim);
+    font-size: 10px;
+    margin-top: 3px;
+  }
+
+  .hud .stat span { color: white; }
+
+  .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .dot--on  { background: var(--cyan); box-shadow: var(--cyan-glow); }
+  .dot--off { background: var(--pink); box-shadow: 0 0 10px var(--pink); }
+
+  #subtitle {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    padding: 12px 28px;
+    background: rgba(2, 5, 10, 0.75);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 255, 225, 0.4);
+    border-radius: 100px;
+    font-size: 14px;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.1em;
+    color: var(--cyan);
+    text-shadow: var(--cyan-glow);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    max-width: 80vw;
+    text-align: center;
+  }
+  #subtitle.visible { opacity: 1; }
+
+  #start {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(ellipse at center, #0a1530 0%, #020510 100%);
+  }
+  #start.hidden { display: none; }
+
+  #start .panel {
+    text-align: center;
+    padding: 40px 50px;
+    border: 1px solid rgba(0, 255, 225, 0.3);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    max-width: 460px;
+  }
+
+  #start h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.25em;
+    color: var(--cyan);
+    text-shadow: var(--cyan-glow);
+    margin-bottom: 8px;
+  }
+  #start .sub {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+  #start p { margin-bottom: 20px; font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.8); }
+
+  #start button {
+    margin-top: 14px;
+    padding: 14px 36px;
+    background: transparent;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.3em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-shadow: var(--cyan-glow);
+  }
+  #start button:hover {
+    background: var(--cyan);
+    color: var(--bg-ink);
+    box-shadow: 0 0 30px rgba(0,255,225,0.6);
+    text-shadow: none;
+  }
+
+  #start .hint {
+    margin-top: 24px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.1em;
+  }
+
+  #demo-badge {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 11;
+    padding: 8px 14px;
+    background: rgba(255, 181, 71, 0.15);
+    border: 1px solid var(--amber);
+    border-radius: 6px;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--amber);
+    display: none;
+  }
+  #demo-badge.visible { display: block; }
+</style>
+</head>
+<body>
+
+<video id="webcam" autoplay playsinline muted></video>
+<canvas id="overlay"></canvas>
+<div id="vignette"></div>
+
+<div class="hud" id="hud-left">
+  <h1>COMPUTER</h1>
+  <div class="stat">AR DISPLAY // v1.0</div>
+  <div class="stat"><span id="hand-status">—</span></div>
+  <div class="stat">ICONS: <span id="icon-count">0</span></div>
+</div>
+
+<div class="hud" id="hud-right">
+  <div class="stat"><span class="dot" id="ws-dot"></span><span id="ws-status">CONNECTING</span></div>
+  <div class="stat">FPS: <span id="fps">—</span></div>
+  <div class="stat" id="gesture-status">—</div>
+</div>
+
+<div id="subtitle"></div>
+
+<div id="demo-badge">DEMO MODE — NO BACKEND</div>
+
+<div id="start">
+  <div class="panel">
+    <h2>COMPUTER</h2>
+    <div class="sub">Augmented Reality Interface</div>
+    <p>
+      Steuere App-Icons mit deiner Hand. Sag deinem Assistenten
+      <em>"zeig mir spotify"</em> – das Icon erscheint im Raum.
+      Pinche es mit Daumen und Zeigefinger um es zu bewegen,
+      halte einen Finger 1 Sekunde darauf um es zu aktivieren.
+    </p>
+    <button id="start-btn">START</button>
+    <div class="hint">Braucht Kamera-Zugriff. Läuft lokal im Browser.</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+</html>
